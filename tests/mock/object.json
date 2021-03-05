@@ -1,0 +1,94 @@
+[
+  {
+    "status": 2,
+    "_id": "mockObjectId1",
+    "category": "Documento",
+    "type": "RG",
+    "foundDate": "2019-08-24T00:00:00.000Z",
+    "fields": [
+      {
+        "_id": "mockIdField1",
+        "name": "Número",
+        "value": "123456"
+      }
+    ],
+    "createdAt": "2019-08-24T21:15:09.070Z",
+    "__v": 0,
+    "applicant": {
+      "address": {
+        "street": "string",
+        "number": "0",
+        "neighborhood": "string",
+        "city": "string",
+        "state": "string",
+        "zipCode": "string"
+      },
+      "profile": "applicant",
+      "createdAt": "2019-08-25T22:48:43.346Z",
+      "_id": "mockApplicantId",
+      "email": "test@applicant",
+      "cpf": "12345678998",
+      "name": "test name",
+      "phone": "string",
+      "__v": 0
+    },
+    "devolutionCode": "code1",
+    "solicitedAt": "2019-09-14T14:44:44.977Z",
+    "devolvedAt": "2019-09-14T15:25:06.820Z",
+    "updateAt": "2019-09-14T15:32:35.165Z"
+  },
+  {
+    "status": 0,
+    "_id": "mockObjectId2",
+    "category": "Documento",
+    "type": "RG",
+    "foundDate": "2019-08-24T00:00:00.000Z",
+    "fields": [
+      {
+        "_id": "mockIdField2",
+        "name": "Número",
+        "value": "555555"
+      }
+    ],
+    "createdAt": "2019-08-24T21:15:27.305Z",
+    "__v": 0,
+    "updateAt": "2019-09-14T15:32:35.165Z"
+  },
+  {
+    "status": 1,
+    "_id": "mockObjectId3",
+    "category": "Documento",
+    "type": "RG",
+    "foundDate": "2019-08-24T00:00:00.000Z",
+    "fields": [
+      {
+        "_id": "mockIdField3",
+        "name": "Número",
+        "value": "123456"
+      }
+    ],
+    "createdAt": "2019-08-24T21:15:09.070Z",
+    "__v": 0,
+    "applicant": {
+      "address": {
+        "street": "string",
+        "number": "0",
+        "neighborhood": "string",
+        "city": "string",
+        "state": "string",
+        "zipCode": "string"
+      },
+      "profile": "applicant",
+      "createdAt": "2019-08-25T22:48:43.346Z",
+      "_id": "mockApplicantId",
+      "email": "test@applicant",
+      "cpf": "12345678998",
+      "name": "test name",
+      "phone": "string",
+      "__v": 0
+    },
+    "devolutionCode": "code3",
+    "solicitedAt": "2019-09-14T14:44:44.977Z",
+    "updateAt": "2019-09-14T15:32:35.165Z"
+  }
+]

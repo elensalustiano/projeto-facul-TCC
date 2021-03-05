@@ -1,0 +1,39 @@
+{
+  "name": "tcc-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "start-watch": "nodemon src/server.js",
+    "test": "jest --detectOpenHandles --forceExit",
+    "test-watch": "jest --watchAll --verbose=true --forceExit"
+  },
+  "keywords": [],
+  "author": "Elen Salustiano",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "3.0.6",
+    "body-parser": "1.19.0",
+    "cors": "2.8.5",
+    "express": "4.17.1",
+    "handlebars": "4.1.2",
+    "joi": "14.3.1",
+    "jsonwebtoken": "8.5.1",
+    "mailgun-js": "0.22.0",
+    "mongoose": "5.5.4",
+    "swagger-ui-express": "4.0.5",
+    "yamljs": "0.3.0"
+  },
+  "devDependencies": {
+    "eslint": "5.16.0",
+    "eslint-config-standard": "12.0.0",
+    "eslint-plugin-import": "2.17.3",
+    "eslint-plugin-node": "9.1.0",
+    "eslint-plugin-promise": "4.1.1",
+    "eslint-plugin-standard": "4.0.0",
+    "jest": "24.7.1",
+    "nodemon": "1.19.1",
+    "supertest": "4.0.2"
+  }
+}

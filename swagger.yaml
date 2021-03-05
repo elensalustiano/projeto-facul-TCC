@@ -1,0 +1,1024 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: 'Swagger Achô'
+tags:
+- name: 'applicant'
+  description: 'Operações referente aos Requerentes(usuários que desejam recuperar objetos)'
+- name: 'institution'
+  description: 'Operações referente a Instituições(usuários que desejam ser um ponto de coleta/devolução)'
+- name: 'user'
+  description: 'Operações comuns para os usuários'
+- name: 'category'
+  description: 'Operações referente a categorias dos objetos'
+- name: 'object'
+  description: 'Operações referente aos objetos'
+- name: 'coupon'
+  description: 'Operações referente a cupons'
+- name: 'notification'
+  description: 'Operações referente a notificações'
+schemes:
+- 'https'
+- 'http'
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+  /applicant:
+    post:
+      tags:
+      - 'applicant'
+      summary: 'Cadastrar Requerente'
+      operationId: 'addReq'
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters:
+      - in: 'body'
+        name: 'body'
+        required: true
+        schema:
+          $ref: '#/definitions/Applicant'
+      responses:
+        200:
+          description: 'Success'
+          schema:
+            $ref: '#/definitions/UserResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        500:
+          $ref: '#/responses/ServerError'
+    patch:
+      tags:
+      - 'applicant'
+      summary: 'Editar dados do Requerente'
+      operationId: 'updateReq'
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters:
+      - in: 'body'
+        name: 'body'
+        required: true
+        schema:
+          properties:
+            name:
+              type: 'string'
+            password:
+              type: 'string'
+            phone:
+              type: 'string'
+            address:
+              $ref: '#/definitions/Address'
+      responses:
+        200:
+          description: 'Objeto com dados do requerente.'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+      security:
+        - Bearer: []
+  /institution:
+    post:
+      tags:
+      - 'institution'
+      summary: 'Cadastrar Instituição'
+      operationId: 'addInst'
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters:
+      - in: 'body'
+        name: 'body'
+        required: true
+        schema:
+          $ref: '#/definitions/Institution'
+      responses:
+        200:
+          description: 'Success'
+          schema:
+            $ref: '#/definitions/UserResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        500:
+          $ref: '#/responses/ServerError'
+    get:
+      tags:
+      - 'institution'
+      summary: 'Retornar Instituições cadastradas'
+      operationId: 'getInst'
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      responses:
+        200:
+          description: 'Array de instituições'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+    patch:
+      tags:
+      - 'institution'
+      summary: 'Editar dados da Instituição'
+      operationId: 'updateInst'
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters:
+      - in: 'body'
+        name: 'body'
+        required: true
+        schema:
+          properties:
+            companyName:
+              type: 'string'
+            fantasyName:
+              type: 'string'
+            password:
+              type: 'string'
+            phone:
+              type: 'string'
+            address:
+              $ref: '#/definitions/Address'
+      responses:
+        200:
+          description: 'Objeto com dados da intituição'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+      security:
+        - Bearer: []
+  /login:
+    post:
+      tags:
+      - 'user'
+      summary: 'Efetuar Login'
+      operationId: 'login'
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters:
+      - in: 'body'
+        name: 'body'
+        required: true
+        schema:
+          required:
+          - 'id'
+          - 'password'
+          properties:
+            id:
+              type: 'string'
+            password:
+              type: 'string'
+      responses:
+        200:
+          description: 'Success'
+          schema:
+            $ref: '#/definitions/UserResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+  /passwordRecovery:
+    post:
+      tags:
+      - 'user'
+      summary: 'Enviar email para recuperação de senha'
+      operationId: 'passRec'
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters:
+      - in: 'body'
+        name: 'body'
+        description: '*id: email ou cpf/cnpj'
+        required: true
+        schema:
+          required:
+          - 'id'
+          - 'url'
+          properties:
+            id:
+              type: 'string'
+            url:
+              type: 'string'
+      responses:
+        200:
+          description: 'Email enviado.'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+  /changePassword:
+      patch:
+        tags:
+        - 'user'
+        summary: ' Realizar troca de senha'
+        operationId: 'changePass'
+        consumes:
+        - 'application/json'
+        produces:
+        - 'application/json'
+        parameters:
+        - in: 'body'
+          name: 'body'
+          description: '*id: email ou cpf/cnpj'
+          required: true
+          schema:
+            required:
+            - 'password'
+            - 'token'
+            properties:
+              password:
+                type: 'string'
+              token:
+                type: 'string'
+        responses:
+          200:
+            description: 'Senha trocada.'
+          400:
+            $ref: '#/responses/BadRequest'
+          500:
+            $ref: '#/responses/ServerError'
+  /category:
+    post:
+      tags:
+      - 'category'
+      summary: 'Cadastrar categoria'
+      description: 'Rota para admin'
+      operationId: 'addCategory'
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters:
+      - in: 'body'
+        name: 'body'
+        required: true
+        schema:
+          $ref: '#/definitions/Category'
+      responses:
+        200:
+          description: 'Mensagem de sucesso'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+      security:
+        - Bearer: []
+    get:
+      tags:
+      - 'category'
+      summary: 'Retornar categorias'
+      operationId: 'getCate'
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      responses:
+        200:
+          description: 'Array de categoria'
+          schema:
+            type: 'array'
+            items:
+              allOf:
+              - type: object
+                properties:
+                  _id:
+                    type: 'string'
+              - $ref: '#/definitions/Category'
+        500:
+          $ref: '#/responses/ServerError'
+    patch:
+      tags:
+      - 'category'
+      summary: 'Adicionar ou remover dados da categoria'
+      description: 'Rota para admin.
+      Obs: só podem ser removidos campos que não estão sendo usados.'
+      operationId: 'updateCategory'
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters:
+      - in: 'body'
+        name: 'body'
+        required: true
+        schema:
+          required:
+            - '_id'
+          allOf:
+          - type: object
+            properties:
+              _id:
+                type: 'string'
+          - $ref: '#/definitions/CategoryTypeAndFields'
+      responses:
+        200:
+          description: 'Mensagem de sucesso'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+      security:
+        - Bearer: []
+  /category/{id}:
+    delete:
+      tags:
+      - 'category'
+      summary: 'Deletar categoria'
+      description: 'Rota para admin.
+      Somente categorias não usadas podem ser deletadas.'
+      operationId: 'delCategory'
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters:
+      - in: 'path'
+        name: 'id'
+        required: true
+        type: 'string'
+      responses:
+        200:
+          description: 'Mensagem de sucesso'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+      security:
+        - Bearer: []
+  /object:
+    post:
+      tags:
+      - 'object'
+      summary: 'Cadastrar objeto'
+      description: 'Rota para instituição'
+      operationId: 'addObj'
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters:
+      - in: 'body'
+        name: 'body'
+        required: true
+        schema:
+          $ref: '#/definitions/ObjectWithImages'
+      responses:
+        200:
+          description: 'Mensagem de sucesso'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+      security:
+        - Bearer: []
+    patch:
+      tags:
+      - 'object'
+      summary: 'Editar dados do objeto'
+      description: 'Rota para instituição'
+      operationId: 'updateObj'
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters:
+      - in: 'body'
+        name: 'body'
+        required: true
+        schema:
+          required:
+            - '_id'
+          allOf:
+          - type: object
+            properties:
+              _id:
+                type: 'string'
+          - $ref: '#/definitions/ObjectWithImages'
+      responses:
+        200:
+          description: 'Objeto com dados do objeto perdido'
+        400:
+          $ref: '#/responses/BadRequest'
+        500:
+          $ref: '#/responses/ServerError'
+      security:
+        - Bearer: []
+    get:
+      tags:
+      - 'object'
+      summary: 'Retornar objetos relacionados ao usuário'
+      operationId: 'getObj'
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters:
+      - in: 'query'
+        description: 'Status: 0 - disponível | 1 - Solicitado | 2 - Devolvido'
+        name: 'status'
+        type: 'string'
+        enum: [0,1,2]
+      - in: 'query'
+        description: 'Código de devolução'
+        name: 'devolutionCode'
+        type: 'string'
+      responses:
+        200:
+          description: 'Array de objetos'
+          schema:
+            type: 'array'
+            items:
+              allOf:
+              - type: object
+                properties:
+                  _id:
+                    type: 'string'
+                  status:
+                    type: 'string'
+              - $ref: '#/definitions/Object'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+      security:
+        - Bearer: []
+  /object/{id}:
+      delete:
+        tags:
+        - 'object'
+        summary: 'Deletar objeto'
+        description: 'Rota para instituição.
+        Somente objetos não solicitados/devolvidos e requisição feita pela instituição
+        que cadastrou o objeto podem ser deletados.'
+        operationId: 'delObj'
+        consumes:
+        - 'application/json'
+        produces:
+        - 'application/json'
+        parameters:
+        - in: 'path'
+          name: 'id'
+          required: true
+          type: 'string'
+        responses:
+          200:
+            description: 'Mensagem de sucesso'
+          401:
+            $ref: '#/responses/Unauthorized'
+          500:
+            $ref: '#/responses/ServerError'
+        security:
+          - Bearer: []
+  /object/find:
+      post:
+        tags:
+        - 'object'
+        summary: 'Pesquisar objeto'
+        operationId: 'findObj'
+        consumes:
+        - 'application/json'
+        produces:
+        - 'application/json'
+        parameters:
+        - in: 'body'
+          name: 'body'
+          required: true
+          schema:
+            $ref: '#/definitions/Object'
+        responses:
+          200:
+            description: 'Array de objetos'
+          400:
+            $ref: '#/responses/BadRequest'
+          500:
+            $ref: '#/responses/ServerError'
+      patch:
+        tags:
+        - 'object'
+        summary: 'Solicitar a recuperação do objeto'
+        description: 'Rota para requerente'
+        operationId: 'solicitObj'
+        consumes:
+        - 'application/json'
+        produces:
+        - 'application/json'
+        parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Id do objeto'
+          required: true
+          schema:
+            properties:
+              objectId:
+                type: string
+        responses:
+          200:
+            description: 'Código de devolução'
+          400:
+            $ref: '#/responses/BadRequest'
+          401:
+            $ref: '#/responses/Unauthorized'
+          500:
+            $ref: '#/responses/ServerError'
+        security:
+          - Bearer: []
+  /object/devolve:
+    patch:
+      tags:
+      - 'object'
+      summary: 'Devolver objeto'
+      description: 'Rota para instituição'
+      operationId: 'devolveObj'
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters:
+      - in: 'body'
+        name: 'body'
+        description: 'Código de devolução do objeto'
+        required: true
+        schema:
+          properties:
+            devolutionCode:
+              type: string
+      responses:
+        200:
+          description: 'Objeto devolvido'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+      security:
+        - Bearer: []
+  /object/cancel:
+      patch:
+        tags:
+        - 'object'
+        summary: 'Cancelar solicitação de objeto'
+        operationId: 'cancelObj'
+        consumes:
+        - 'application/json'
+        produces:
+        - 'application/json'
+        parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Código de devolução do objeto'
+          required: true
+          schema:
+            properties:
+              devolutionCode:
+                type: string
+        responses:
+          200:
+            description: 'Solicitação do objeto cancelada'
+          400:
+            $ref: '#/responses/BadRequest'
+          500:
+            $ref: '#/responses/ServerError'
+        security:
+          - Bearer: []
+  /coupon:
+      post:
+        tags:
+        - 'coupon'
+        summary: 'Cadastrar cupom'
+        operationId: 'addCoupon'
+        consumes:
+        - 'application/json'
+        produces:
+        - 'application/json'
+        parameters:
+        - in: 'body'
+          name: 'body'
+          required: true
+          schema:
+            $ref: '#/definitions/Coupon'
+        responses:
+          200:
+            description: 'Mensagem de sucesso'
+          400:
+            $ref: '#/responses/BadRequest'
+          500:
+            $ref: '#/responses/ServerError'
+      get:
+        tags:
+        - 'coupon'
+        summary: 'Retornar cupons'
+        operationId: 'getCoupon'
+        consumes:
+        - 'application/json'
+        produces:
+        - 'application/json'
+        parameters:
+        - in: 'query'
+          description: 'Categoria'
+          name: 'category'
+          type: 'string'
+        - in: 'query'
+          description: 'Subcategoria'
+          name: 'type'
+          type: 'string'
+        responses:
+          200:
+            description: 'Array de cupons'
+            schema:
+              type: 'array'
+              items:
+                $ref: '#/definitions/Coupon'
+          500:
+            $ref: '#/responses/ServerError'
+  /notification:
+      post:
+        tags:
+        - 'notification'
+        summary: 'Cadastrar notificação'
+        operationId: 'addNotification'
+        consumes:
+        - 'application/json'
+        produces:
+        - 'application/json'
+        parameters:
+        - in: 'body'
+          name: 'body'
+          required: true
+          schema:
+            $ref: '#/definitions/Object'
+        responses:
+          200:
+            description: 'Mensagem de sucesso'
+          400:
+            $ref: '#/responses/BadRequest'
+          500:
+            $ref: '#/responses/ServerError'
+        security:
+          - Bearer: []
+      get:
+        tags:
+        - 'notification'
+        summary: 'Retornar notificações do usuário'
+        operationId: 'getNotification'
+        consumes:
+        - 'application/json'
+        produces:
+        - 'application/json'
+        responses:
+          200:
+            description: 'Array de notificações'
+            schema:
+              type: 'array'
+              items:
+                type: object
+                properties:
+                  email:
+                    type: 'string'
+                  objectToFind:
+                    type: 'object'
+                  objectFound:
+                    type: 'object'
+          500:
+            $ref: '#/responses/ServerError'
+        security:
+          - Bearer: []
+  /notification/{id}:
+      delete:
+        tags:
+        - 'notification'
+        summary: 'Deletar notificação'
+        operationId: 'delNotification'
+        consumes:
+        - 'application/json'
+        produces:
+        - 'application/json'
+        parameters:
+        - in: 'path'
+          name: 'id'
+          required: true
+          type: 'string'
+        responses:
+          200:
+            description: 'Mensagem de sucesso'
+          401:
+            $ref: '#/responses/Unauthorized'
+          500:
+            $ref: '#/responses/ServerError'
+        security:
+          - Bearer: []
+  /object/interested:
+      patch:
+        tags:
+        - 'object'
+        summary: 'Adicionar requerente na lista de interessados pelo objeto'
+        description: 'Rota para requerente'
+        operationId: 'interestedObj'
+        consumes:
+        - 'application/json'
+        produces:
+        - 'application/json'
+        parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Id do objeto'
+          required: true
+          schema:
+            properties:
+              objectId:
+                type: string
+        responses:
+          200:
+            description: 'Mensagem de sucesso'
+          400:
+            $ref: '#/responses/BadRequest'
+          401:
+            $ref: '#/responses/Unauthorized'
+          500:
+            $ref: '#/responses/ServerError'
+        security:
+          - Bearer: []
+      get:
+        tags:
+        - 'object'
+        summary: 'Retornar objetos que o requerente está interessado'
+        operationId: 'getInterestedObj'
+        consumes:
+        - 'application/json'
+        produces:
+        - 'application/json'
+        parameters:
+        - in: 'query'
+          description: 'Status: 0 - disponível | 1 - Solicitado | 2 - Devolvido'
+          name: 'status'
+          type: 'string'
+          enum: [0,1,2]
+        responses:
+          200:
+            description: 'Array de objetos'
+            schema:
+              type: 'array'
+              items:
+                allOf:
+                - type: object
+                  properties:
+                    _id:
+                      type: 'string'
+                    status:
+                      type: 'string'
+                - $ref: '#/definitions/Object'
+          401:
+            $ref: '#/responses/Unauthorized'
+          500:
+            $ref: '#/responses/ServerError'
+        security:
+          - Bearer: []
+  /object/interested/{objectId}:
+      delete:
+        tags:
+        - 'object'
+        summary: 'Deletar interesse pelo objeto'
+        description: 'Rota para requerente.'
+        operationId: 'delInterestedObj'
+        consumes:
+        - 'application/json'
+        produces:
+        - 'application/json'
+        parameters:
+        - in: 'path'
+          name: 'objectId'
+          description: 'Id do objeto que será deletado o interesse.'
+          required: true
+          type: 'string'
+        responses:
+          200:
+            description: 'Mensagem de sucesso'
+          401:
+            $ref: '#/responses/Unauthorized'
+          500:
+            $ref: '#/responses/ServerError'
+        security:
+          - Bearer: []
+responses:
+  ServerError:
+    description: 'Internal Server Error'
+    schema:
+      $ref: '#/definitions/ErrorSchemaOne'
+  BadRequest:
+    description: 'Bad Request'
+    schema:
+      $ref: '#/definitions/ErrorSchemaTwo'
+  Unauthorized:
+    description: 'Unauthorized'
+    schema:
+      $ref: '#/definitions/ErrorSchemaOne'
+
+definitions:
+  Address:
+    type: 'object'
+    properties:
+      street:
+        type: 'string'
+      number:
+        type: 'integer'
+      neighborhood:
+        type: 'string'
+      city:
+        type: 'string'
+      state:
+        type: 'string'
+      zipCode:
+        type: 'string'
+  Applicant:
+    type: 'object'
+    required:
+    - 'email'
+    - 'password'
+    - 'cpf'
+    - 'name'
+    - 'phone'
+    - 'address'
+    properties:
+      email:
+        type: 'string'
+      password:
+        type: 'string'
+      cpf:
+        type: 'string'
+        minimum: 11
+        maximum: 11
+      name:
+        type: 'string'
+      phone:
+        type: 'string'
+      address:
+        $ref: '#/definitions/Address'
+  Institution:
+    type: 'object'
+    required:
+    - 'email'
+    - 'password'
+    - 'cnpj'
+    - 'companyName'
+    - 'fantasyName'
+    - 'phone'
+    - 'address'
+    properties:
+      email:
+        type: 'string'
+      password:
+        type: 'string'
+      cnpj:
+        type: 'string'
+        minimum: 14
+        maximum: 14
+      phone:
+        type: 'string'
+      companyName:
+        type: 'string'
+      fantasyName:
+        type: 'string'
+      address:
+       $ref: '#/definitions/Address'
+  Object:
+    type: 'object'
+    properties:
+      category:
+        type: 'string'
+      type:
+        type: 'string'
+      foundDate:
+        type: 'string'
+        format: 'date'
+      fields:
+        type: 'array'
+        items:
+          type: 'object'
+          properties:
+            name:
+              type: 'string'
+            value:
+              type: 'string'
+  ObjectWithImages:
+    allOf:
+    - $ref: '#/definitions/Object'
+    - type: 'object'
+    properties:
+      images:
+        type: 'array'
+        items:
+          type: 'string'
+  Category:
+    allOf:
+    - type: 'object'
+      required:
+      - 'name'
+      - 'type'
+      properties:
+        name:
+          type: 'string'
+    - $ref: '#/definitions/CategoryTypeAndFields'
+
+  CategoryTypeAndFields:
+    type: 'object'
+    properties:
+      type:
+        type: 'array'
+        items:
+          type: 'string'
+      fields:
+        type: 'array'
+        items:
+          type: 'object'
+          required:
+          - 'name'
+          properties:
+            name:
+              type: 'string'
+            options:
+              type: 'array'
+              items:
+                type: 'string'
+  UserResponse:
+    type: 'object'
+    properties:
+      user:
+        type: 'object'
+      token:
+        type: 'string'
+  Coupon:
+    type: 'object'
+    required:
+    - 'title'
+    - 'code'
+    - 'companyName'
+    - 'category'
+    properties:
+      title:
+        type: 'string'
+      code:
+        type: 'string'
+      companyName:
+        type: 'string'
+      description:
+        type: 'string'
+      logo:
+        type: 'string'
+      category:
+        type: 'string'
+      type:
+        type: 'string'
+  ErrorSchemaOne:
+    type: 'object'
+    properties:
+      statusCode:
+        type: 'integer'
+      name:
+        type: 'string'
+      message:
+        type: 'string'
+  ErrorSchemaTwo:
+    type: 'object'
+    properties:
+      statusCode:
+        type: 'integer'
+      name:
+        type: 'string'
+      message:
+        type: 'array'
+        items:
+          type: 'object'
+          properties:
+            field:
+              type: 'string'
+            error:
+              type: 'string'

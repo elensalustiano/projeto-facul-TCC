@@ -1,0 +1,8 @@
+{
+  "jwtSecret": "jwtSecret",
+  "mongoConnect": "mongoConnect",
+  "mailgunConfig": {
+    "apiKey": "apiKey",
+    "domain": "domain"
+  }
+}
